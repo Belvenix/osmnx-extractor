@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - "8081:80"
+      - "8888:8888"
     volumes:
       - data-volume:${SHARED_DATA_FOLDER}:rw
   nominatim:
