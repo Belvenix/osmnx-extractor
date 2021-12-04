@@ -28,8 +28,7 @@ services:
     environment:
       - OVERPASS_META=yes
       - OVERPASS_MODE=clone
-      - OVERPASS_CLONE_SOURCE=file:///osmnx_data/shared/monaco-latest.osm.pbf
-      - OVERPASS_DIFF_URL=http://download.openstreetmap.fr/replication/europe/monaco/minute/
+      - OVERPASS_CLONE_SOURCE=file://${SHARED_DATA_FOLDER}monaco-latest.osm.pbf
       - OVERPASS_RULES_LOAD=10
     volumes:
       - /big/docker/overpass_db/:/db
