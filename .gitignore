@@ -102,8 +102,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.venv
 env/
 venv/
 ENV/
@@ -127,3 +125,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# my usages
+osmnx-examples/
+graphs_thesis/

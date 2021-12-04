@@ -1,0 +1,40 @@
+version: "3"
+services:
+  downloader:
+    container_name: downloader
+    build: .
+    ports:
+      - "8081:80"
+    volumes:
+      - data-volume:${SHARED_DATA_FOLDER}:rw
+  nominatim:
+    depends_on:
+      - downloader
+    container_name: nominatim
+    image: mediagis/nominatim:3.7
+    ports:
+      - "8080:8080"
+    environment:
+      - PBF_PATH=${SHARED_DATA_FOLDER}monaco-latest.osm.pbf
+    volumes:
+      - data-volume:${SHARED_DATA_FOLDER}:ro
+  overpass:
+    depends_on:
+      - downloader
+    container_name: overpass
+    image: wiktorn/overpass-api
+    ports:
+      - 12345:80
+    environment:
+      - OVERPASS_META=yes
+      - OVERPASS_MODE=clone
+      - OVERPASS_CLONE_SOURCE=file:///osmnx_data/shared/monaco-latest.osm.pbf
+      - OVERPASS_DIFF_URL=http://download.openstreetmap.fr/replication/europe/monaco/minute/
+      - OVERPASS_RULES_LOAD=10
+    volumes:
+      - /big/docker/overpass_db/:/db
+      - data-volume:${SHARED_DATA_FOLDER}:ro
+
+volumes:
+  data-volume:
+
