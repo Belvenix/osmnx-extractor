@@ -8,8 +8,7 @@ services:
     environment:
       - PBF_PATH=/data/${OSMNX_DOCKER_FILENAME}.osm.pbf
     volumes:
-      - ${BASE_OSMNX}/osm_files:/data
-      - ${BASE_OSMNX}/template_diff:/template_diff
+      - ./osm_files:/data
   overpass:
     container_name: overpass
     image: wiktorn/overpass-api:0.7.56.4
@@ -20,10 +19,7 @@ services:
       - OVERPASS_META=yes
       - OVERPASS_MODE=init
       - OVERPASS_PLANET_URL=file:///data/${OSMNX_DOCKER_FILENAME}.osm.bz2
-      - OVERPASS_UPDATE_SLEEP=3600
-      - OVERPASS_RULES_LOAD=10
     volumes:
-      - ${BASE_OSMNX}/osm_files:/data
-      - ${BASE_OSMNX}/template_diff:/template_diff
-      - ${BASE_OSMNX}/overpass_db/:/db
+      - ./osm_files:/data
+      - ./overpass_db/:/db
 

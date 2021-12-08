@@ -127,10 +127,7 @@ dmypy.json
 .pyre/
 
 # my usages
-changes/
 osm_files/
 osh_files/
-osh_polies/
-template_diff/
-graphml_files/
 overpass_db/
+graphml_files/

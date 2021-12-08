@@ -16,4 +16,6 @@ http://localhost:8080/search.php?q=Monte%20carlo
 
 
 Usage
-./extract_with_docker.sh -C "europe" -c "monaco" -p "Monte carlo" -i "day" -t "2020-08-01T00:00:00Z"
+./extract.sh -C "europe" -c "monaco" -i 1 -b 2009 -e 2021
+
+I did not update cookies please do it
