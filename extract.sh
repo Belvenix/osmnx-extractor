@@ -17,12 +17,14 @@ mkdir -p ./osm_files
 mkdir -p ./overpass_db
 mkdir -p ./graphml_files
 
+if [ ! -f ./output_cookie.txt ]
+then
+	python3 ./oauth_cookie_client.py -o output_cookie.txt -s settings.json
+fi
+
 if [ ! -f ./osh_files/${continet}_${country}.osh.pbf ]
 then
-	python3 geofabrik_cookie/oauth_cookie_client.py -o geofabrik_cookie/output_cookie.txt -s geofabrik_cookie/settings.json
-	curl -b ${cat geofabrik_cookie/output_cookie.txt | cut -d ';' -f 1} https://osm-internal.download.geofabrik.de/${continet}/${country}-internal.osh.pbf --output ./osh_files/${continet}_${country}.osh.pbf
-	#curl -b 'gf_download_oauth="login|2018-04-12|wPJcv7mDmOjzS0gGNYthWEbaNckSPUTK7-Ll8GLwdmkvW-uMsa6_msfS0lYU4Erg69HAYBg7FovYfVf0n9qBBAZCnrhGtQ9aXfY7joTVrqFxaJRKIm-DKDhwbR7zd7H6tDAAagS-bTkidIsSWoK2ydKQ8m8FaDyemfvxWdJgQDGnaWVOjJQcdxK7nkEtVWE0evHg9ORDjSwNG1HM1o6XjccPcOlypVQ1J_sHC8mcVRiNSbzViuv-VAZcYFtoZNXZJuWjU2o4WIGN1oWbiQ=="' https://osm-internal.download.geofabrik.de/${continet}/${country}-internal.osh.pbf --output ./osh_files/${continet}_${country}.osh.pbf
-
+	curl -b $(cat output_cookie.txt | cut -d ';' -f 1) https://osm-internal.download.geofabrik.de/${continet}/${country}-internal.osh.pbf --output ./osh_files/${continet}_${country}.osh.pbf
 else
 	echo "Reausing file ./osh_files/${continet}_${country}.osh.pbf"
 fi

@@ -130,6 +130,5 @@ dmypy.json
 osm_files/
 osh_files/
 overpass_db/
-<<<<<<< HEAD
 graphml_files/
-graphs_thesis/
+output_cookie.txt
