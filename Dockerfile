@@ -23,7 +23,6 @@ RUN mkdir -p /opt/osmnx_graph/changes \
 	&& mkdir -p /opt/osmnx_graph/overpass_db
 WORKDIR /opt/osmnx_graph
 
-COPY ./monaco-latest.osm.pbf ./osm_files/current_file.osm.pbf
 COPY . .
 
 RUN apt-get update && apt-get install dos2unix

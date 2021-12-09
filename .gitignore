@@ -133,3 +133,4 @@ overpass_db/
 graphml_files/
 output_cookie.txt
 extracted/
+cache/

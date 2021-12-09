@@ -17,8 +17,6 @@ mkdir -p ./osm_files
 mkdir -p ./overpass_db
 mkdir -p ./graphml_files
 
-pwd; ls -l
-
 if [ ! -f ./output_cookie.txt ]
 then
 	python3 ./oauth_cookie_client.py -o output_cookie.txt -s settings.json
@@ -26,6 +24,7 @@ fi
 
 if [ ! -f ./osh_files/${continet}_${country}.osh.pbf ]
 then
+	echo "Downloading file ${continet}_${country}.osh.pbf"
 	curl -b $(cat output_cookie.txt | cut -d ';' -f 1) https://osm-internal.download.geofabrik.de/${continet}/${country}-internal.osh.pbf --output ./osh_files/${continet}_${country}.osh.pbf
 else
 	echo "Reausing file ./osh_files/${continet}_${country}.osh.pbf"
@@ -41,9 +40,10 @@ then
 		osmconvert ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf -o=./osm_files/${continet}_${country}_${year}_01_01.osm
 		bzip2 -k ./osm_files/${continet}_${country}_${year}_01_01.osm
 
-		echo "Starting docker-compose"
+		echo "Copying file ${continet}_${country}_${year}_01_01"
 		export OSMNX_DOCKER_FILENAME=${continet}_${country}_${year}_01_01
 
+		cp ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf /my_data/${continet}_${country}_${year}_01_01.osm.pbf
 		cp ./osm_files/${continet}_${country}_${year}_01_01.osm.bz2 /my_data/${continet}_${country}_${year}_01_01.osm.bz2
 		# docker-compose up -d
 		# sleep 30
