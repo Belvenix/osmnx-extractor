@@ -6,11 +6,13 @@ import osmnx as ox
 
 def get_graph(city: str, output: str) -> None:
     ox.utils.config(
-        nominatim_endpoint='http://nominatim:8080',
-        overpass_endpoint='http://overpass:12345',
+        nominatim_endpoint='http://localhost:8080',
+    #    overpass_endpoint='http://localhost:12345/api',
     )
 
-    G = ox.graph_from_place(city, network_type="bike")
+    print('Looking for city ' + str(city))
+    G = ox.graph_from_place(city, network_type="drive")
+    print('Saving city ' + str(city))
     ox.save_graphml(G, filepath=output)
 
 

@@ -10,7 +10,7 @@ RUN apt-get update \
 		--no-install-recommends \
 		 -y \
 		 osmium-tool=1.10.0-1 \
-		bzip2=1.0.8-2 \
+		bzip2 \
 	&& pip3 install --no-cache-dir osmnx==1.1.2 \ 
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +24,10 @@ RUN mkdir -p /opt/osmnx_graph/changes \
 WORKDIR /opt/osmnx_graph
 
 COPY ./monaco-latest.osm.pbf ./osm_files/current_file.osm.pbf
-COPY ./save_graph.py .
-COPY ./extract.sh .
+COPY . .
 
-CMD ["/bin/bash", "./extrac.sh", "-C", "europa", "-c", "france", "-p", "Paris", "-i", "day", "-t", "2020-08-01T00:00:00Z"]
+RUN apt-get update && apt-get install dos2unix
+
+RUN dos2unix ./extract.sh
+
+CMD ["/bin/bash", "./extract.sh", "-C", "europe", "-c", "monaco", "-i", "1", "-b", "2009", "-e", "2021"]
