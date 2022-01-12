@@ -22,9 +22,9 @@ then
 fi
 
 [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
-while IFS="," read -r continet country city relation_id
+while IFS="," read -r continet country city
 do
-	echo "Scrapping ${continet} ${country} ${city} with relation id ${relation_id}"
+	echo "Scrapping ${continet} ${country} ${city}"
 	if [ ! -f ./osh_files/${continet}_${country}.osh.pbf ]
 	then
         	curl -b $(cat output_cookie.txt | cut -d ';' -f 1) https://osm-internal.download.geofabrik.de/${continet}/${country}-internal.osh.pbf --output ./osh_files/${continet}_${country}.osh.pbf
@@ -45,10 +45,10 @@ do
                 	echo "Starting docker-compose"
                 	export OSMNX_DOCKER_FILENAME=${continet}_${country}_${year}_01_01
                 	docker-compose up -d
-                	sleep 30
+                	sleep 60
 
                 	echo "Running grafml extractor"
-                	python3 ./save_graph.py --relation ${relation} --output ./graphml_files/${continet}_${country}_${city}_${year}
+                	python3 ./save_graph.py --city ${city} --output ${continet}_${country}_${city}_${year}
 
                 	#echo "Tests"
                 	#curl http://localhost:8080/search.php?q=Monte%20Carlo
@@ -59,11 +59,10 @@ do
                 	rm -rf ./osm_files/* ./overpass_db/*
         	done
 
-        	rm -rf ./osh_files/${continet}_${country}.osh.pbf
         	echo "Done"
 	else
-        	rm -rf ./osh_files/${continet}_${country}.osh.pbf
         	echo "Could not download file maybe your cookies are wrong or your connection is bad"
 	fi
 
 done < ${csv_file}
+rm -rf ./osh_files/*
