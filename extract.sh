@@ -42,6 +42,11 @@ do
                 	osmconvert ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf -o=./osm_files/${continet}_${country}_${year}_01_01.osm
                 	bzip2 -k ./osm_files/${continet}_${country}_${year}_01_01.osm
 
+			chmod 666 ./osm_files/${continet}_${country}_${year}_01_01.osm
+			chmod 666 ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf
+			chmod 666 ./osm_files/${continet}_${country}_${year}_01_01.osm
+			
+
                 	echo "Starting docker-compose"
                 	export OSMNX_DOCKER_FILENAME=${continet}_${country}_${year}_01_01
                 	docker-compose up -d
@@ -56,7 +61,7 @@ do
 
                 	echo "Cleaning"
                 	docker-compose down
-                	rm -rf ./osm_files/* ./overpass_db/*
+                	rm -rf ./overpass_db/* #./osm_files/*
         	done
 
         	echo "Done"

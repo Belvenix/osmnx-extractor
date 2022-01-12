@@ -12,8 +12,9 @@ def get_graph(city: str, output: str) -> None:
         polygon = pickle.load(poly_file)
 
     ox.utils.config(
-        nominatim_endpoint='http://nominatim:8080',
-        overpass_endpoint='http://overpass:12345',
+            nominatim_endpoint='http://localhost:8080', 
+            overpass_endpoint='http://localhost:12345/api/', 
+            overpass_rate_limit=False
     )
     
     graphml_filename = os.path.join("graphml_files", output) 
