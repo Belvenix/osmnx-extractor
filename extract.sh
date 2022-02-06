@@ -62,7 +62,7 @@ do
                 		docker-compose up -d
 				current_time=0
 				while [[ $current_time -le $wait_time && $finished -eq 0 ]];do
-					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g 'http://localhost:12345/api/interpreter?data=[out:json];area[name="${city}"];out;') -gt 350 ]];then 
+					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g 'http://localhost:12345/api/interpreter?data=[out:json];area[name="${city}"];out;' | wc -c) -gt 350 ]];then 
 						finished=1
 					fi
                 			sleep 5m
@@ -70,13 +70,17 @@ do
 				done
 				wait_time=$(($wait_time * 2 ))
 				attempt=$(($attempt + 1))
-				docker-compose down
-				rm -rf ./overpass_db/*
+				if [[ $finished -eq 0 ]];then
+					docker-compose down
+					rm -rf ./overpass_db/*
+				fi
 			done
 
 			if [[ $finished -eq 1 ]];then
            			echo "Running grafml extractor"
                 		python3 ./save_graph.py --city ${city} --output ${continet}_${country}_${city}_${year}
+				docker-compose down
+				rm -rf ./overpass_db/*
 			else
 				echo "Could not download ${continet}_${country}_${city}_${year} graph"
 			fi
