@@ -5,17 +5,17 @@ import osmnx as ox
 
 
 def clean_graph(first, second) -> bool:
-    print(f"---------Chaking difference of {second.name} in {first.name}")
+    print(f"Comment --------- Chaking difference of {second.name} in {first.name}")
     
     dif_nodes = set(second) - set(first)
     if len(dif_nodes) == 0:
-        print("---------There are no new nodes but still checking")
+        print("Comment --------- There are no new nodes but still checking")
     
     dif_edges = set(second.edges()) - set(first.edges())
     if len(dif_edges) != 0:
         return False
         
-    print("---------There are no new edges so checking edge data")
+    print("Comment --------- There are no new edges so checking edge data")
     
     for edge in set(second.edges()):
         for x in second.edges([edge[0], edge[1]], data=True):
@@ -25,7 +25,7 @@ def clean_graph(first, second) -> bool:
                     save=False
                 
             if save:
-                print("---------We found some new edge data so saving it")
+                print("Comment --------- We found some new edge data so saving it")
                 return False
         
     return True
