@@ -62,7 +62,7 @@ do
                 		docker-compose up -d
 				current_time=0
 				while [[ $current_time -le $wait_time && $finished -eq 0 ]];do
-					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g 'http://localhost:12345/api/interpreter?data=[out:json];area[name="${city}"];out;' | wc -c) -gt 350 ]];then 
+					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g "http://localhost:12345/api/interpreter?data=[out:json];area[name=${city}];out;" | wc -c) -gt 350 ]];then 
 						finished=1
 					fi
                 			sleep 5m
