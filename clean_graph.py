@@ -20,8 +20,14 @@ def clean_graph(first, second) -> bool:
     for edge in set(second.edges()):
         for x in second.edges([edge[0], edge[1]], data=True):
             save=True
+            x_values = x[2]
+            x_values.pop('osmid', None)
+            x_values.pop('name', None)
             for y in first.edges([edge[0], edge[1]], data=True):
-                if x[2] == y[2]:
+                y_values = y[2]
+                y_values.pop('osmid', None)
+                y_values.pop('name', None)
+                if x_values == y_values:
                     save=False
                 
             if save:
