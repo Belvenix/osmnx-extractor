@@ -16,7 +16,7 @@ services:
     ports:
       - 12345:80
     environment:
-      - OVERPASS_META=yes
+      - OVERPASS_META=no
       - OVERPASS_MODE=init
       - OVERPASS_PLANET_URL=file:///data/${OSMNX_DOCKER_FILENAME}.osm.bz2
     volumes:
