@@ -57,16 +57,18 @@ do
 			wait_time=10
 			finished=0
 			while [[ $attempt -le 6 && $finished -eq 0 ]];do
-                		echo "Starting docker-compose for ${attempt}/6"
+                		echo "Starting docker-compose for attempt ${attempt}/6"
               			export OSMNX_DOCKER_FILENAME=${continet}_${country}_${year}_01_01
                 		docker-compose up -d
 				current_time=0
+				# TODO:
+				# Add better healthcheck
 				while [[ $current_time -le $wait_time && $finished -eq 0 ]];do
 					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g "http://localhost:12345/api/interpreter?data=[out:json];area[name=${city}];out;" | wc -c) -gt 350 ]];then 
 						finished=1
 					fi
-                			sleep 5m
-					current_time=$(( $current_time + 5 ))
+                			sleep 1m
+					current_time=$(( $current_time + 1 ))
 				done
 				wait_time=$(($wait_time * 2 ))
 				attempt=$(($attempt + 1))
