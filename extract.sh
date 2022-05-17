@@ -13,7 +13,6 @@ done
 
 mkdir -p ./osh_files
 mkdir -p ./osm_files
-mkdir -p ./overpass_db
 mkdir -p ./graphml_files
 
 if [ ! -f ./output_cookie.txt ]
@@ -52,6 +51,11 @@ do
                 	osmium time-filter -o ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf ./osh_files/${continet}_${country}.osh.pbf ${year}-01-01T00:00:00Z
                 	osmconvert ./osm_files/${continet}_${country}_${year}_01_01.osm.pbf -o=./osm_files/${continet}_${country}_${year}_01_01.osm
                 	bzip2 -k ./osm_files/${continet}_${country}_${year}_01_01.osm
+
+			if [[ ! -f "./osm_files/${continet}_${country}_${year}_01_01.osm" ]]
+			then
+				continue
+			fi
 			
 			attempt=0
 			wait_time=10
@@ -64,23 +68,23 @@ do
 				# TODO:
 				# Add better healthcheck
 				while [[ $current_time -le $wait_time && $finished -eq 0 ]];do
-					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 && $(curl -s -g "http://localhost:12345/api/interpreter?data=[out:json];area[name=${city}];out;" | wc -c) -gt 350 ]];then 
+					if [[ $(curl -s http://localhost:8080/search.php?q=${city} | wc -c) -gt 5 ]];then 
 						finished=1
 					fi
-                			sleep 1m
-					current_time=$(( $current_time + 1 ))
+                	sleep 5m
+					current_time=$(( $current_time + 5 ))
 				done
 				wait_time=$(($wait_time * 2 ))
 				attempt=$(($attempt + 1))
 				if [[ $finished -eq 0 ]];then
-					docker-compose down
+					docker-compose down -v --rmi="local"
 					rm -rf ./overpass_db/*
 				fi
 			done
 
 			if [[ $finished -eq 1 ]];then
-           			echo "Running grafml extractor"
-                		python3 ./save_graph.py --city ${city} --output ${continet}_${country}_${city}_${year}
+           		echo "Running grafml extractor"
+                python3 ./save_graph.py --time "${year}-01-01T00:00:00Z" --city ${city} --output ${continet}_${country}_${city}_${year}
 				docker-compose down
 				rm -rf ./overpass_db/*
 			else
@@ -88,7 +92,7 @@ do
 			fi
 
                 	echo "Cleaning"
-                	rm -rf ./cache #./osm_files/*
+                	rm -rf ./cache ./osm_files/*
         	done
 
         	echo "Done"
@@ -96,8 +100,6 @@ do
         	echo "Could not download file maybe your cookies are wrong or your connection is bad"
 	fi
 	rm -rf ./osh_files/*
-	exit
-
 done < ${csv_file}
 echo "Cleaining graph process started"
-python3 clean_graph.py
+#python3 clean_graph.py

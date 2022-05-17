@@ -9,17 +9,17 @@ services:
       - PBF_PATH=/data/${OSMNX_DOCKER_FILENAME}.osm.pbf
     volumes:
       - ./osm_files:/data
-  overpass:
-    container_name: overpass
-    image: wiktorn/overpass-api:0.7.56.4
-    restart: unless-stopped
-    ports:
-      - 12345:80
-    environment:
-      - OVERPASS_META=no
-      - OVERPASS_MODE=init
-      - OVERPASS_PLANET_URL=file:///data/${OSMNX_DOCKER_FILENAME}.osm.bz2
-    volumes:
-      - ./osm_files:/data
-      - ./overpass_db/:/db
+#  overpass:
+#    container_name: overpass
+#    image: wiktorn/overpass-api:0.7.56.4
+#    restart: unless-stopped
+#    ports:
+#      - 12345:80
+#    environment:
+#      - OVERPASS_META=no
+#      - OVERPASS_MODE=init
+#      - OVERPASS_PLANET_URL=file:///data/${OSMNX_DOCKER_FILENAME}.osm.bz2
+#    volumes:
+#      - ./osm_files:/data
+#      - ./overpass_db/:/db
 
